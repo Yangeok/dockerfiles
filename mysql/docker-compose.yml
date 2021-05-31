@@ -1,0 +1,20 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_ID: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DB_NAME: test
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+volumes:
+  mysql: ~
