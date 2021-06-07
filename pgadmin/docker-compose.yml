@@ -11,6 +11,7 @@ services:
       POSTGRES_USER: root
       POSTGRES_DB: postgis
       POSTGRES_HOST_AUTH_METHOD: trust
+      LANG: ko_KR.UTF-8
     ports:
       - 5432:5432
 
@@ -37,6 +38,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: root@gmail.com
       PGADMIN_DEFAULT_PASSWORD: root
       PGADMIN_CONFIG_SERVER_MODE: 'False'
+      LOCALE: ko_KR
     volumes:
       - pgadmin:/root/.pgadmin
       - ./pgadmin-data:/tmp
