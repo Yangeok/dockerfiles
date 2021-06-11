@@ -7,11 +7,11 @@ services:
       - ./postgis_data:/var/lib/postgresql
     environment:
       ALLOW_IP_RANGE: 0.0.0.0/0
+      POSTGRES_USER: postgres
       POSTGRES_PASS: root
-      POSTGRES_USER: root
       POSTGRES_DB: postgis
+      # LANG: ko_KR.UTF-8
       POSTGRES_HOST_AUTH_METHOD: trust
-      LANG: ko_KR.UTF-8
     ports:
       - 5432:5432
 
@@ -19,7 +19,7 @@ services:
   #   container_name: postgres_container
   #   image: postgres
   #   environment:
-  #     POSTGRES_USER: root
+  #     POSTGRES_USER: postgres
   #     POSTGRES_PASSWORD: root
   #     PGDATA: /data/postgres
   #   volumes:
@@ -49,6 +49,8 @@ services:
     restart: unless-stopped
 
 networks:
+  postgres:
+    driver: bridge
   postgis:
     driver: bridge
 
