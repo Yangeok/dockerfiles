@@ -1,0 +1,4 @@
+pgadmin-data
+postgis-data
+webapps
+*.war
