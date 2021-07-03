@@ -1,0 +1,10 @@
+version: '3'
+
+services: 
+  geoserver:
+    image: bitnami/tomcat:${TOMCAT_VERSION}
+    ports: 
+      - ${TOMCAT_PORT}:8080
+    volumes: 
+      - ./webapps:/opt/bitnami/tomcat/webapps_default/geoserver
+      - ./ROOT.war:/opt/bitnami/tomcat/webapps_default/ROOT.war

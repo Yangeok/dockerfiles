@@ -1,0 +1,8 @@
+*.csv
+*.json
+!data/*.csv
+!data/*.json
+drivers
+logs
+modules
+data

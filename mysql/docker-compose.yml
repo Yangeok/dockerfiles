@@ -1,20 +1,32 @@
 version: '3'
+
 services:
   mysql:
-    image: mysql:5.7
+    image: mysql:${MYSQL_VERSION}
     restart: always
     environment:
-      MYSQL_ROOT_ID: root
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DB_NAME: test
+      MYSQL_ROOT_ID: ${MYSQL_ROOT_ID}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DB_NAME: ${MYSQL_DB_NAME}
     command:
       - --default-authentication-plugin=mysql_native_password
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
+      - --character-set-server=${MYSQL_CHAR_SET}
+      - --collation-server=${MYSQL_COLLATION}
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql:/var/lib/mysql
     ports:
-      - 3306:3306
+      - ${MYSQL_PORT}:3306
+
+  pma:
+    image: phpmyadmin/phpmyadmin:${PMA_VERSION}
+    depends_on:
+      - mysql
+    restart: always
+    ports:
+      - ${PMA_PORT}:80
+    environment:
+      PMA_HOST: mysql
+
 volumes:
   mysql: ~

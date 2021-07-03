@@ -1,0 +1,45 @@
+version: '3.5'
+
+services:
+  postgis:
+    image: postgis/postgis:${POSTGIS_VERSION}
+    volumes:
+      - ./postgis-data:/tmp
+    environment:
+      ALLOW_IP_RANGE: 0.0.0.0/0
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASS: ${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - ${POSTGRES_PORT}:5432
+    restart: unless-stopped
+  
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:${PGADMIN_VERSION}
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      LOCALE: ${PGADMIN_LOCALE}
+    volumes:
+      - pgadmin:/root/.pgadmin
+      - ./pgadmin-data:/tmp
+    ports:
+      - ${PGADMIN_PORT}:80
+    networks:
+      - postgis
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+  postgis:
+    driver: bridge
+
+volumes:
+    postgres:
+    pgadmin:
+    pgadmin-data:
+    postgis-data:
