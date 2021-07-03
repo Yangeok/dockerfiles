@@ -5,6 +5,8 @@ services:
   nifi:
     build: 
       context: .
+      args: 
+        NIFI_VERSION: ${NIFI_VERSION}
     container_name: nifi
     restart: unless-stopped
     network_mode: bridge
