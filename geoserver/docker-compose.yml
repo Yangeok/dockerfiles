@@ -6,5 +6,7 @@ services:
     ports: 
       - ${TOMCAT_PORT}:8080
     volumes: 
-      - ./webapps:/opt/bitnami/tomcat/webapps_default/geoserver
-      - ./ROOT.war:/opt/bitnami/tomcat/webapps_default/ROOT.war
+      - ./conf/catalina.sh:/opt/bitnami/tomcat/bin/catalina.sh
+      
+      - ./webapps/ROOT:/opt/bitnami/tomcat/webapps_default/ROOT
+      - ./webapps/geoserver:/opt/bitnami/tomcat/webapps_default/geoserver
