@@ -1,0 +1,16 @@
+{
+    "bridge": {
+        "name": "Homebridge 2D17",
+        "username": "0E:D8:D1:A9:2D:17",
+        "port": 53975,
+        "pin": "031-45-154"
+    },
+    "accessories": [],
+    "platforms": [
+        {
+            "name": "Config",
+            "port": 8581,
+            "platform": "config"
+        }
+    ]
+}

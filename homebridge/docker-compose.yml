@@ -1,0 +1,21 @@
+version: '3'
+
+services: 
+  homebridge:
+    image: oznu/homebridge:${HB_VERSION}
+    container_name: homebridge
+    restart: always
+    network_mode: host
+    # extra_hosts:
+    #   - 'host.docker.internal:192.168.0.254'
+    environment:
+      - TZ=${HB_TIMEZONE}
+      - PGID=${HB_GROUP_ID}
+      - PUID=${HB_USER_ID}
+      - HOMEBRIDGE_CONFIG_UI=${HB_USING_UI}
+      - HOMEBRIDGE_CONFIG_UI_PORT=${HB_UI_PORT}
+    ports: 
+      - ${HB_UI_PORT}:${HB_UI_PORT}
+      # - '192.168.0.7:${HB_UI_PORT}:${HB_UI_PORT}'
+    volumes:
+      - ./homebridge:/homebridge
