@@ -31,13 +31,9 @@ services:
     restart: unless-stopped
 
 networks:
-  postgres:
-    driver: bridge
   postgis:
     driver: bridge
 
 volumes:
-    postgres:
     pgadmin:
     pgadmin-data:
-    postgis-data:

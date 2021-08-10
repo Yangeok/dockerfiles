@@ -2,7 +2,11 @@ version: '3'
 
 services:
   mysql:
-    image: mysql:${MYSQL_VERSION}
+    build:
+      context: .
+      args:
+        MARIA_VERSION: ${MARIA_VERSION} 
+    # image: mariadb:${MARIA_VERSION} # mysql:${MYSQL_VERSION} # TMP:
     restart: always
     environment:
       MYSQL_ROOT_ID: ${MYSQL_ROOT_ID}
@@ -12,7 +16,11 @@ services:
       - --default-authentication-plugin=mysql_native_password
       - --character-set-server=${MYSQL_CHAR_SET}
       - --collation-server=${MYSQL_COLLATION}
+
+      - --ft_min_word_len=${MARIA_FT_MIN_WORD_LEN}
+      - --innodb_ft_min_token_size=${MARIA_FT_MIN_WORD_LEN}
     volumes:
+      - ./conf:/etc/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql:/var/lib/mysql
     ports:
