@@ -37,4 +37,7 @@ WORKDIR /
 RUN git clone https://github.com/i0seph/textsearch_ko.git &&\
     cd textsearch_ko &&\
     apt install -y postgresql-server-dev-12 &&\
-    make USE_PGXS=1
+    make USE_PGXS=1 &&\
+    make USE_PGXS=1 install
+
+RUN ldconfig

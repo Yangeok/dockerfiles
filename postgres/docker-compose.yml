@@ -13,8 +13,9 @@ services:
       POSTGRES_PASS: ${POSTGRES_PASS}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_HOST_AUTH_METHOD: trust
-    # volumes: 
-    #   - ./mecab/ts_mecab_ko.sql:/textsearch_ko/ts_mecab_ko.sql
+    volumes: 
+      - ./mecab/ts_mecab_ko.sql:/textsearch_ko/ts_mecab_ko.sql
+      - ./mecab/ld.so.conf:/etc/ld.so.conf
     ports:
       - ${POSTGRES_PORT}:5432
     restart: unless-stopped
