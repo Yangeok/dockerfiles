@@ -1,10 +1,20 @@
 version: '3'
 
+networks:
+  frontend:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
 services:
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
     container_name: namenode
+    hostname: 172.20.0.6
     restart: always
+    networks:
+      frontend:
+          ipv4_address: 172.20.0.6
     ports:
       - 9870:9870
       - 9000:9000
@@ -18,9 +28,15 @@ services:
   datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
     container_name: datanode
+    hostname: 172.20.0.7
     restart: always
+    networks:
+      frontend:
+          ipv4_address: 172.20.0.7
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
+    ports:
+      - 9864:9864
     environment:
       SERVICE_PRECONDITION: 'namenode:9870'
     env_file:
@@ -30,6 +46,9 @@ services:
     image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
     container_name: resourcemanager
     restart: always
+    networks:
+      frontend:
+          ipv4_address: 172.20.0.8
     environment:
       SERVICE_PRECONDITION: 'namenode:9000 namenode:9870 datanode:9864'
     env_file:
@@ -39,6 +58,9 @@ services:
     image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
     container_name: nodemanager
     restart: always
+    networks:
+      frontend:
+          ipv4_address: 172.20.0.9
     environment:
       SERVICE_PRECONDITION: 'namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088'
     env_file:
@@ -48,6 +70,9 @@ services:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
     container_name: historyserver
     restart: always
+    networks:
+      frontend:
+          ipv4_address: 172.20.0.10
     environment:
       SERVICE_PRECONDITION: 'namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088'
     volumes:
