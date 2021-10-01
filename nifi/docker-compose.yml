@@ -8,6 +8,7 @@ services:
       args: 
         NIFI_VERSION: ${NIFI_VERSION}
     container_name: nifi
+    user: root
     restart: unless-stopped
     network_mode: bridge
     ports:
@@ -16,10 +17,12 @@ services:
       # - ${NIFI_SOCKET_PORT}:10000/tcp # Remote Input Socket
       # - ${NIFI_DEBUG_PORT}:8000/tcp # JVM Debugger
     volumes:
+      - ./external_proc:/opt/nifi/nifi-current/external_proc
       - ./modules:/opt/nifi-current/modules
       - ./drivers:/opt/nifi/nifi-current/drivers
       - ./templates:/opt/nifi/nifi-current/templates
       - ./data:/opt/nifi/nifi-current/data
+      - ./output:/opt/nifi/nifi-current/output
       - /var/lib/nifi/logs:/opt/nifi/nifi-current/logs
       # mkdir /var/lib/nifi && chown -R 1000:1000 /var/lib/nifi
       # - /var/lib/nifi/database_repository:/opt/nifi/nifi-current/database_repository
@@ -32,6 +35,8 @@ services:
       #- /var/lib/nifi/conf/nifi.properties:/opt/nifi/nifi-current/conf/nifi.properties:ro
 
     environment:
+      TZ: 'Asia/Seoul' # Timezone
+
       ########## JVM ##########
       NIFI_JVM_HEAP_INIT: ${NIFI_HEAP_INIT} #   The initial JVM heap size.
       NIFI_JVM_HEAP_MAX: ${NIFI_HEAP_MAX} #   The maximum JVM heap size.
