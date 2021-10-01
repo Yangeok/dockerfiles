@@ -19,6 +19,7 @@ services:
       - ${NAMENODE_PORT1}:9870
       - ${NAMENODE_PORT2}:9000
     volumes:
+      # - ./conf:${HADOOP_CONF_PATH}etc/hadoop
       - hadoop_namenode:/hadoop/dfs/name
     environment:
       - CLUSTER_NAME=test
@@ -37,6 +38,7 @@ services:
       - hadoop_datanode:/hadoop/dfs/data
     ports:
       - 9864:9864
+      - 9866:9866
     environment:
       SERVICE_PRECONDITION: '${NAMENODE_NAME}:${NAMENODE_PORT1}'
     env_file:
