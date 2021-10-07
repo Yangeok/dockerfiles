@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    command: redis-server --requirepass changeme --port 6379 --requirepass 1234 
+    restart: always
+    user: root
+    ports:
+      - 6379:6379
