@@ -1,25 +1,16 @@
 version: '3'
 
-# networks:
-#   frontend:
-#     ipam:
-#       config:
-#         - subnet: ${SUBNET_RANGE}
 
 services:
   namenode:
     image: bde2020/hadoop-namenode:${HADOOP_VERSION}
     container_name: ${NAMENODE_NAME}
-    # hostname: ${NAMENODE_IP}
+    hostname: namenode
     restart: always
-    # networks:
-    #   frontend:
-    #     ipv4_address: ${NAMENODE_IP}
     ports:
       - ${NAMENODE_PORT1}:9870
       - ${NAMENODE_PORT2}:9000
     volumes:
-      # - ./conf:${HADOOP_CONF_PATH}etc/hadoop
       - hadoop_namenode:/hadoop/dfs/name
     environment:
       - CLUSTER_NAME=test
@@ -29,11 +20,8 @@ services:
   datanode:
     image: bde2020/hadoop-datanode:${HADOOP_VERSION}
     container_name: ${DATANODE_NAME}
-    # hostname: ${DATANODE_IP}
+    hostname: datanode
     restart: always
-    # networks:
-    #   frontend:
-    #     ipv4_address: ${DATANODE_IP}
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
     ports:
@@ -48,9 +36,6 @@ services:
     image: bde2020/hadoop-resourcemanager:${HADOOP_VERSION}
     container_name: ${RES_MAN_NAME}
     restart: always
-    # networks:
-    #   frontend:
-    #     ipv4_address: ${RES_MAN_IP}
     ports: 
       - 8088:8088
     environment:
@@ -62,9 +47,6 @@ services:
     image: bde2020/hadoop-nodemanager:${HADOOP_VERSION}
     container_name: nodemanager
     restart: always
-    # networks:
-    #   frontend:
-    #     ipv4_address: ${NODE_MAN1_IP}
     environment:
       SERVICE_PRECONDITION: '${NAMENODE_NAME}:${NAMENODE_PORT1} ${NAMENODE_NAME}:${NAMENODE_PORT2} ${DATANODE_NAME}:${DATANODE_PORT} ${RES_MAN_NAME}:${RES_MAN_PORT}'
     env_file:
@@ -74,9 +56,6 @@ services:
     image: bde2020/hadoop-historyserver:${HADOOP_VERSION}
     container_name: historyserver
     restart: always
-    # networks:
-    #   frontend:
-    #     ipv4_address: ${HIST_MAN_IP}
     environment:
       SERVICE_PRECONDITION: '${NAMENODE_NAME}:${NAMENODE_PORT1} ${NAMENODE_NAME}:${NAMENODE_PORT2} ${DATANODE_NAME}:${DATANODE_PORT} ${RES_MAN_NAME}:${RES_MAN_PORT}'
     volumes:
