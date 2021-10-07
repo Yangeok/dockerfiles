@@ -11,6 +11,9 @@ services:
     user: root
     restart: unless-stopped
     network_mode: bridge
+    extra_hosts:
+      - 'namenode:34.64.138.19'
+      - 'name.ndap.com:211.39.94.210'
     ports:
       - ${NIFI_HTTP_PORT}:8080/tcp
       # - ${NIFI_HTTPS_PORT}:8443/tcp # HTTPS
