@@ -9,6 +9,7 @@ services:
     # image: mariadb:${MARIA_VERSION} # mysql:${MYSQL_VERSION} # TMP:
     restart: always
     environment:
+      TZ: 'Asia/Seoul'
       MYSQL_ROOT_ID: ${MYSQL_ROOT_ID}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DB_NAME: ${MYSQL_DB_NAME}
