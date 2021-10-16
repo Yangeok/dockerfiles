@@ -1,0 +1,32 @@
+version: '3'
+services:
+
+  certbot:
+    image: certbot/dns-cloudflare
+    volumes:
+      - certbot_etc:/etc/letsencrypt
+      - ./cloudflare.ini:/root/cloudflare.ini
+    command: > 
+      certonly 
+      --dns-cloudflare
+      --dns-cloudflare-credentials /root/cloudflare.ini
+      --dns-cloudflare-propagation-seconds 15
+      --email ${CERT_EMAIL}
+      --agree-tos
+      --no-eff-email
+      --force-renewal
+      -d ${CERT_DOMAIN}
+    entrypoint : "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - certbot_etc:/etc/letsencrypt
+    command : "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+volumes:
+  certbot_etc:
