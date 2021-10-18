@@ -3,7 +3,7 @@ version: '3'
 services:
   redis:
     image: redis
-    command: redis-server --requirepass {PASSWORD} --port 6379
+    command: redis-server --requirepass ${PASSWORD} --port 6379
     restart: always
     user: root
     ports:
