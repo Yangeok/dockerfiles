@@ -2,19 +2,21 @@ version: '3.3'
 
 services:
   traefik:
-    image: traefik:v2.5
-    container_name: traefik
+    image: traefik # The official Traefik docker image
     command:
-      #- --log.level=DEBUG
-      - --api.insecure=true
-      - --providers.docker=true
       - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
+    environment:
+      TRAEFIK_ACCESSLOG: true
+      # TRAEFIK_METRICS_PROMETHEUS: true
+      TRAEFIK_API_INSECURE: true # The Web UI
+      TRAEFIK_PROVIDERS_DOCKER: true
+    labels:
+      traefik.http.routers.traefik.rule: Host(`traefik.service.localhost`)
+      traefik.http.routers.traefik.service: api@internal
     ports:
-      - 80:80
-      - 8080:8080
+      - 8081:8080 # The Web UI
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
 
   portainer:
     image: portainer/portainer
