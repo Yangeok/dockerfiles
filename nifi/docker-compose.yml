@@ -1,7 +1,7 @@
 # REF: https://github.com/robcowart/docker_compose_cookbook/blob/master/nifi/docker-compose.yml
 version: '3'
 
-services:  
+services:
   nifi:
     build: 
       context: .
@@ -10,50 +10,31 @@ services:
     container_name: nifi
     user: root
     restart: unless-stopped
-    network_mode: bridge
     ports:
-      # - ${NIFI_HTTP_PORT}:8080/tcp
-      - 8443:8443/tcp
+      # - ${NIFI_HTTP_PORT}:8080/tcp 
+      - ${NIFI_HTTPS_PORT}:8443/tcp
+      - 10000
     volumes:
       - ./drivers:/opt/nifi/nifi-current/drivers
       - ./templates:/opt/nifi/nifi-current/templates
       - ./data:/opt/nifi/nifi-current/data
     environment:
-      nifi.security.keystore: /opt/nifi-current/conf/keystore.p12
-      nifi.security.keystoreType: PKCS12
-      nifi.security.keystorePasswd: 
-      nifi.security.keyPasswd: 
-      nifi.security.truststore: /opt/nifi-current/conf/truststore.p12
-      nifi.security.truststoreType: PKCS12
-      nifi.security.truststorePasswd: 
-
       TZ: 'Asia/Seoul' # Timezone
 
       NIFI_JVM_HEAP_INIT: ${NIFI_HEAP_INIT} #   The initial JVM heap size.
       NIFI_JVM_HEAP_MAX: ${NIFI_HEAP_MAX} #   The maximum JVM heap size.
 
-      nifi.web.https.host: 0.0.0.0
-      nifi.web.https.port: 8443        
-      nifi.web.proxy.host: 0.0.0.0:18443
+      # NIFI_HTTP_PORT: ${NIFI_HTTP_PORT}
+      # NIFI_HTTP_HOST: ${NIFI_HTTP_HOST}
+      NIFI_HTTPS_PORT: ${NIFI_HTTPS_PORT}
+      NIFI_HTTPS_HOST: ${NIFI_HTTP_HOST}
+      # NIFI_WEB_PROXY_CONTEXT_PATH: /traefik/,/gateway/nifi/nifi-app/
 
+      SINGLE_USER_CREDENTIALS_USERNAME: admin
+      SINGLE_USER_CREDENTIALS_PASSWORD: admin12345678
+      
 #   nifi-registry:
 #     image: apache/nifi-registry:latest
 #     ports:
 #       - 18080:18080
 #     network_mode: bridge
-
-#   kdc:
-#     image: gcavalcante8808/krb5-server
-#     restart: always
-#     ports:
-#       - 88:88
-#       - 464:464
-#       - 749:749
-#     environment:
-#       KRB5_REALM: EXAMPLE.COM
-#       KRB5_KDC: localhost
-#     volumes:
-#       - krb5kdc-data:/var/lib/krb5kdc
-
-# volumes:
-#   krb5kdc-data:
