@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  tibero:
+    build:
+      context: .
+      # args:
+    container_name: tibero
+    hostname: localhost
+    ports:
+      - ${TIBERO_PORT}:8629
+    volumes:
+      - ./ddl:/tmp
+      - ./licenses:/usr/local/tibero6/license
+    stdin_open: true
+    tty: true
