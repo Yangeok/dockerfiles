@@ -1,8 +1,8 @@
-version: '3'
+version: "3"
 
 services:
   portainer:
-    image: portainer/portainer-ce:alpine
+    image: portainer/portainer-ce:2.14.0
     container_name: portainer
     restart: always
     ports:
