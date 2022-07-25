@@ -2,11 +2,4 @@
 *.json
 !data/*.csv
 !data/*.json
-drivers
-logs
-modules
-data
 .env
-
-# NiFi Registry
-nifi_registry/flow_storage

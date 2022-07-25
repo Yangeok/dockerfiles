@@ -3,51 +3,44 @@ version: "3"
 services:
   # REF: https://github.com/robcowart/docker_compose_cookbook/blob/master/nifi/docker-compose.yml
   nifi:
+    container_name: nifi
     build:
-      context: .
+      context: ./nifi
+      dockerfile: Dockerfile
       args:
         NIFI_VERSION: ${NIFI_VERSION}
-    container_name: nifi
     user: root
     restart: unless-stopped
     networks:
       - nifi_network
     ports:
-      # - ${NIFI_HTTP_PORT}:8080/tcp
       - ${NIFI_HTTPS_PORT}:8443/tcp
       - 10000
     volumes:
-      - ./drivers:/opt/nifi/nifi-current/drivers
-      - ./templates:/opt/nifi/nifi-current/templates
-      - ./data:/opt/nifi/nifi-current/data
-      - ./scripts:/opt/nifi/nifi-current/scripts
+      - ./nifi/drivers:/opt/nifi/nifi-current/drivers
+      - ./nifi/data:/opt/nifi/nifi-current/data
+      - ./nifi/scripts:/opt/nifi/nifi-current/scripts
     environment:
-      TZ: "Asia/Seoul" # Timezone
-
-      NIFI_JVM_HEAP_INIT: ${NIFI_HEAP_INIT} #   The initial JVM heap size.
-      NIFI_JVM_HEAP_MAX: ${NIFI_HEAP_MAX} #   The maximum JVM heap size.
-
-      # NIFI_HTTP_PORT: ${NIFI_HTTP_PORT}
-      # NIFI_HTTP_HOST: ${NIFI_HTTP_HOST}
+      TZ: Asia/Seoul # Timezone
+      NIFI_JVM_HEAP_INIT: ${NIFI_HEAP_INIT} # Initial JVM heap size
+      NIFI_JVM_HEAP_MAX: ${NIFI_HEAP_MAX} # Maximum JVM heap size
       NIFI_HTTPS_PORT: ${NIFI_HTTPS_PORT}
       NIFI_HTTPS_HOST: ${NIFI_HTTP_HOST}
-      # NIFI_WEB_PROXY_CONTEXT_PATH: /traefik/,/gateway/nifi/nifi-app/
-
-      SINGLE_USER_CREDENTIALS_USERNAME: admin
-      SINGLE_USER_CREDENTIALS_PASSWORD: admin12345678
+      SINGLE_USER_CREDENTIALS_USERNAME: ${NIFI_USERNAME}
+      SINGLE_USER_CREDENTIALS_PASSWORD: ${NIFI_PASSWORD}
 
   # REF: https://github.com/michalklempa/docker-nifi-registry/blob/develop/docker-compose.github.yml
   nifi-registry:
-    image: michalklempa/nifi-registry
+    container_name: nifi-registry
     build:
-      context: ./nifi_registry
+      context: ./nifi-registry
+      dockerfile: Dockerfile
       args:
         MIRROR: https://archive.apache.org/dist
         NIFI_VERSION: ${NIFI_VERSION}
-    container_name: nifi-registry
     volumes:
-      - ~/.ssh:/home/nifi/.ssh
-      - ./nifi_registry/flow_storage:/opt/nifi-registry/flow-storage-git
+      - ~/.ssh:/home/nifi/.ssh # FIXME:
+      - ./nifi-registry/flow_storage:/opt/nifi-registry/flow-storage-git
     ports:
       - ${NIFI_REG_HTTP_PORT}:18080/tcp
     environment:
