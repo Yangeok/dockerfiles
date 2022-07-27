@@ -1,0 +1,6 @@
+logs
+dags
+plugins
+
+.env
+!.env.example
